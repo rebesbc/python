@@ -3,6 +3,7 @@
 # > python -i bfs.py
 # > root.print_tree()
 # > bfs(f)
+# > exit()
 from tree import Node
 
 root = Node(1)

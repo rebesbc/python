@@ -59,7 +59,7 @@ def dfs(frontier):
             print("actual state: ", actual_state, ", offsprings: ", offsprings)
             if len(offsprings) > 0:
                 if frontier:
-                    frontier[:0] = offsprings # concatena al inicio toda la lista enviada por parámetro
+                    frontier[:0] = offsprings # concatena al inicio toda la lista offsprings
                 else:
                     frontier = offsprings[:] # clonar la lista offsprings en frontier
             print("* frontier: ", frontier, "\n")
