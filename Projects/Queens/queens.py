@@ -5,7 +5,7 @@
 # > dfs(f)
 # > exit()
 
-n = 4 # número de reinas en el tablero, tablero (n * n)
+n = 5 # número de reinas en el tablero, tablero (n * n)
 f = [[i+1] for i in range(n)] # [[1], [2], [3], ..., [n]]
 
 # se recibe una lista que almacena las posibles configuraciones para las reinas
@@ -39,13 +39,14 @@ def expand(configuration):
     # se envía una lista con las siguientes configuraciones posibles (lista de listas)
     offsprings = []
 
+    # si no es de las hojas del árbol
     if len(configuration) < n:
         # offsprings = [[1], [2], [3], ... [n]]
-        offsprings = [[item] for item in range(1, n+1)]
+        offsprings = [[item] for item in range(1, n+1) if item not in configuration]
 
         for child in offsprings:
             child[:0] = configuration
-    
+        
     return offsprings
 
 def attacks(configuration):
