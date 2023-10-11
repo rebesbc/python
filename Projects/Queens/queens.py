@@ -9,7 +9,8 @@
 from tree import Node
 
 n = 4 # número de reinas en el tablero, tablero (n * n)
-root = Node([1] * n, 0) # [1, 1, 1, 1], n = 4
+root = Node([1] * n) # [1, 1, 1, 1], n = 4
+root.level = 0
 f = [root.data] # [i+1] for i in range(n) [[1], [2], [3], ..., [n]]
 
 
@@ -28,7 +29,7 @@ def limited_dfs(frontier, limit):
             return True
         else:
             if limit > actual_states_level:
-                print("#actual_state: ", actual_state)
+                print("- actual_state: ", actual_state)
                 offsprings = expand(actual_state)
                 print("- offsprings: ", offsprings)
                 assign_level(offsprings, actual_states_level + 1)
@@ -37,7 +38,7 @@ def limited_dfs(frontier, limit):
                         frontier[:0] = offsprings # concatena al inicio toda la lista offsprings
                     else:
                         frontier = offsprings[:] # clonar la lista offsprings en frontier
-                print("* frontier: ", frontier, "\n")
+                print("- frontier: ", frontier, "\n")
                 limited_dfs(frontier, limit)
             
 
@@ -65,12 +66,15 @@ def expand(configuration):
     for i in range(n):
         child = list(configuration)
         element = child[i]
-        if (element < n - 1):
+        if (element <= n - 1):
             element += 1
             child[i] = element
             offsprings.append(child)
 
-    print(offsprings)
+            # agregar al árbol cada hijo-offspring
+            father = root.get_node(configuration)
+            father.add_child(Node(child))
+
     return offsprings
 
 

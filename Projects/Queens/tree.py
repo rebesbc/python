@@ -5,11 +5,6 @@ class Node:
         self.level = None
         self.children = []
 
-    def __init__(self, data, level):
-        self.data = data
-        self.level = level
-        self.children = []
-
     # toString
     def __repr__(self):
         # %s se sustituye por lo que hay a continuación de %
