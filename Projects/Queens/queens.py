@@ -45,10 +45,11 @@ def limited_dfs(frontier, limit):
 
 def iterative_dfs():
     limit = 2
-    ok = True
+    ok = False
 
-    while ok:
+    while not ok:
         frontier = [root.data]
+        print("## Probando con un límite de ", limit, " ##")
         ok = limited_dfs(frontier, limit)
         limit += 2
 
@@ -102,7 +103,9 @@ def attacks(configuration):
 #######################
 def main():
     print("Calculemos el tablero para ", n, " reinas:")
-    limited_dfs(f, 5)
+    ok = limited_dfs(f, 10)
+    if not ok:
+        print("No se halló solución en un límite de 10")
 
 
 if __name__=="__main__": 
