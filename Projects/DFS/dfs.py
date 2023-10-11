@@ -78,3 +78,7 @@ def expand(data):
         offsprings.append(child.data)
 
     return offsprings
+
+
+root.print_tree()
+dfs(f)
