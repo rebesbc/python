@@ -1,21 +1,20 @@
-# depth first search
 # python terminal test:
 # > python -i Projects/Queens/queens.py
-# > f
-# > dfs(f)
+# > dls(f, max_tries)
 # > exit()
 
-# greedy, voraz o A*
 from tree import Node
 
-n = 4 # número de reinas en el tablero, tablero (n * n)
-root = Node([1] * n) # [1, 1, 1, 1], n = 4
+n = 5                   # tablero (n * n)
+max_tries = 30          # límite de iteraciones a probar
+root = Node([1] * n)    # [1, 1, 1, 1], n = 4
 root.level = 0
-f = [root.data] # [i+1] for i in range(n) [[1], [2], [3], ..., [n]]
+f = [root.data]         # frontier en estado inicial
+visited = []            # nodos visitados
 
 
-# se recibe una lista que almacena las posibles configuraciones para las reinas
-def limited_dfs(frontier, limit):
+# Depth Limited Search
+def dls(frontier, limit):
     if len(frontier) == 0:
         print("No hay solución")
         return False
@@ -23,8 +22,9 @@ def limited_dfs(frontier, limit):
         actual_state = frontier.pop(0)
         node = root.get_node(actual_state)
         actual_states_level = node.level
+        visited.append(actual_state)
         if goal_test(actual_state):
-            print("Se encontró la solución para ", n, " reinas:\n")
+            print("Se encontró la solución para ", n, " reinas: ")
             print(actual_state)
             return True
         else:
@@ -35,33 +35,34 @@ def limited_dfs(frontier, limit):
                 assign_level(offsprings, actual_states_level + 1)
                 if len(offsprings) > 0:
                     if frontier:
-                        frontier[:0] = offsprings # concatena al inicio toda la lista offsprings
+                        frontier[:0] = offsprings
                     else:
-                        frontier = offsprings[:] # clonar la lista offsprings en frontier
+                        frontier = offsprings[:]
                 print("- frontier: ", frontier, "\n")
-                limited_dfs(frontier, limit)
+                dls(frontier, limit)
+            else:
+                print("No se halló solución para ", n, " reinas en ", limit, " iteraciones")
+                return False
             
 
-
-def iterative_dfs():
+# Iterative Deepening Depth First Search
+def iddfs():
     limit = 2
+    visited.clear()
     ok = False
 
     while not ok:
         frontier = [root.data]
         print("## Probando con un límite de ", limit, " ##")
-        ok = limited_dfs(frontier, limit)
+        ok = dls(frontier, limit)
         limit += 2
 
 
 def goal_test(test):
-    return attacks(test) == 0 and len(test) == n
+    return attacks(test) == 0
 
 
 def expand(configuration):
-    # obtener los hijos/descendientes del vector dado
-    # se envía una lista con las siguientes configuraciones posibles (lista de listas)
-    # máx. -n- hijos
     offsprings = []
 
     for i in range(n):
@@ -70,11 +71,12 @@ def expand(configuration):
         if (element <= n - 1):
             element += 1
             child[i] = element
-            offsprings.append(child)
+            if child not in visited:
+                offsprings.append(child)
 
-            # agregar al árbol cada hijo-offspring
-            father = root.get_node(configuration)
-            father.add_child(Node(child))
+                # agregar al árbol cada hijo-offspring
+                father = root.get_node(configuration)
+                father.add_child(Node(child))
 
     return offsprings
 
@@ -90,22 +92,19 @@ def attacks(configuration):
     queens = len(configuration) # n
     attacks = 0
     
-    if queens > 1: # si hay más de 1 reina en la configuración, comprobar ataques
-        for i in range(1, queens): # for i = 1; i < n; i++
-            for j in range(i+1, queens+1): # for j = i+1; j <= n; j++
-                if configuration[i-1] == configuration[j-1]:
-                    attacks += 2
-                if abs(i - j) == abs(configuration[i-1] - configuration[j-1]):
-                    attacks += 2
+    for i in range(1, queens): # for i = 1; i < n; i++
+        for j in range(i+1, queens+1): # for j = i+1; j <= n; j++
+            if configuration[i-1] == configuration[j-1]:
+                attacks += 2
+            if abs(i - j) == abs(configuration[i-1] - configuration[j-1]):
+                attacks += 2
 
     return attacks
 
-#######################
+###########
 def main():
-    print("Calculemos el tablero para ", n, " reinas:")
-    ok = limited_dfs(f, 10)
-    if not ok:
-        print("No se halló solución en un límite de 10")
+    print("# Calculemos el tablero para ", n, " reinas #")
+    dls(f, max_tries)
 
 
 if __name__=="__main__": 
