@@ -1,17 +1,20 @@
 n = 50                  # tablero (n * n)
 f = [0] * n             # [0, 0, 0, 0], n = 4
 blacklist = []          # configuraciones visitadas
+iterations = 0
 
 # Greedy Search
 def greedys(frontier):
-    print("\n- state: ", frontier)
+    greedys.counter += 1
+    print("i: ", greedys.counter)
+    print(frontier, "\n")
     if not frontier:
-        print("No hay solución")
+        print("> No hay solución")
         return False
     else:
         actual_state = frontier
         if goal_test(actual_state):
-            print("Se encontró la solución para ", n, " reinas: ")
+            print("> Se encontró la solución para ", n, " reinas: ")
             print(actual_state)
             return True
         else:
@@ -22,6 +25,7 @@ def greedys(frontier):
             greedys(offsprings[0])
         else:
             greedys([])
+greedys.counter = 0
 
 
 def goal_test(test):
@@ -82,6 +86,7 @@ def attacks(configuration):
                 attacks += 2
 
     return attacks
+
 
 ###########
 def main():
