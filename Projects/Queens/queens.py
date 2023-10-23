@@ -16,6 +16,7 @@ def greedys(frontier):
         if goal_test(actual_state):
             print("> Se encontró la solución para ", n, " reinas: ")
             print(actual_state)
+            print_board(actual_state)
             return True
         else:
             offsprings = expand(actual_state)
@@ -86,6 +87,18 @@ def attacks(configuration):
                 attacks += 2
 
     return attacks
+
+def print_board(board:list[int]):
+    print_hline("┌", "───┬", "┐", len(board))
+    for j in range(len(board)):
+        for i in range(len(board)):
+            print("│ X ", end="") if board[i] == j else print("│   ", end="")
+        print("│")
+        print_hline("├", "───┼", "┤", len(board)) if j != len(board) - 1 else print_hline("└", "───┴", "┘", len(board))
+def print_hline(first:str, middle:str, last:str, size:int):
+    line:str = first
+    line += middle * size
+    print(line[0:-1] + last)
 
 
 ###########
