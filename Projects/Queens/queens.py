@@ -3,7 +3,6 @@ import random
 n = 50                  # tablero (n * n)
 f = [0] * n             # [0, 0, 0, 0], n = 4
 blacklist = []          # configuraciones visitadas
-iterations = 0
 
 # Greedy Search
 def greedys(frontier):
